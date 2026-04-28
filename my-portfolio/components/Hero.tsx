@@ -3,6 +3,11 @@
 import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollToPlugin);
+}
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -197,10 +202,11 @@ export default function Hero() {
           e.preventDefault();
           const elem = document.getElementById('projects');
           if (elem) {
-            const offset = 80;
-            const elementPosition = elem.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - offset;
-            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            gsap.to(window, {
+              duration: 1.2,
+              scrollTo: { y: elem, offsetY: 80 },
+              ease: 'power4.inOut',
+            });
           }
         }} style={{ textDecoration: 'none' }}>
           <motion.div
