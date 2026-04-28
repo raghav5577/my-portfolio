@@ -4,9 +4,12 @@ import { useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import Link from 'next/link';
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+}
 
 const services = [
   {
@@ -125,10 +128,11 @@ export default function Services() {
             e.preventDefault();
             const elem = document.getElementById('contact');
             if (elem) {
-              const offset = 80;
-              const elementPosition = elem.getBoundingClientRect().top;
-              const offsetPosition = elementPosition + window.pageYOffset - offset;
-              window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+              gsap.to(window, {
+                duration: 1.2,
+                scrollTo: { y: elem, offsetY: 80 },
+                ease: 'power4.inOut',
+              });
             }
           }} style={{ textDecoration: 'none' }}>
             <motion.div

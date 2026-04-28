@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
+import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollToPlugin);
+}
 
 const navLinks = [
   { name: 'Home', href: '#home' },
@@ -27,7 +32,6 @@ export default function Navbar() {
         const el = document.getElementById(section);
         if (el) {
           const rect = el.getBoundingClientRect();
-          // Adjust threshold for better detection
           if (rect.top <= 200) {
             setActiveSection(section);
             break;
@@ -36,7 +40,7 @@ export default function Navbar() {
       }
     };
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -45,13 +49,11 @@ export default function Navbar() {
     const targetId = href.replace('#', '');
     const elem = document.getElementById(targetId);
     if (elem) {
-      const offset = 80; // Navbar height
-      const elementPosition = elem.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
+      const offset = 80;
+      gsap.to(window, {
+        duration: 1.2,
+        scrollTo: { y: elem, offsetY: offset },
+        ease: 'power4.inOut',
       });
       setMobileOpen(false);
     }
