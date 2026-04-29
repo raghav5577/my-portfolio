@@ -10,21 +10,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
-    id: 'orbit',
-    title: 'ORBIT – AI 911 Dispatch',
-    subtitle: 'Full Stack Development',
-    description: 'Built a production-style voice AI system to convert emergency calls into structured incidents and dispatch workflows using Next.js, Mappls API, MCP and LLM.',
-    image: '/project-orbit.png',
-    tags: ['Next.js', 'React', 'Supabase', 'Twilio', 'LLM API'],
-    highlights: [
-      'Voice pipeline integrating STT, LLM-based classification',
-      'Outbound call automation via Twilio',
-      'Webhook pipelines for call events and data normalization',
-    ],
-    link: '#',
-    color: '#7c3aed',
-  },
-  {
     id: 'campusbuddy',
     title: 'CampusBuddy',
     subtitle: 'Full Stack Development',
@@ -40,19 +25,19 @@ const projects = [
     color: '#f59e0b',
   },
   {
-    id: 'infuturum',
-    title: 'Infuturum 4.0',
-    subtitle: 'Frontend Development',
-    description: 'Interactive event website for ACM Bennett University with cinematic UI, parallax effects, countdown timers, and media interactions.',
-    image: '/project-infuturum.png',
-    tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+    id: 'orbit',
+    title: 'ORBIT – AI 911 Dispatch',
+    subtitle: 'Full Stack Development',
+    description: 'Built a production-style voice AI system to convert emergency calls into structured incidents and dispatch workflows using Next.js, Mappls API, MCP and LLM.',
+    image: '/project-orbit.png',
+    tags: ['Next.js', 'React', 'Supabase', 'Twilio', 'LLM API'],
     highlights: [
-      'Cinematic UI with parallax animations',
-      'Countdown timers and media interactions',
-      'Responsive, modular component architecture',
+      'Voice pipeline integrating STT, LLM-based classification',
+      'Outbound call automation via Twilio',
+      'Webhook pipelines for call events and data normalization',
     ],
     link: '#',
-    color: '#06b6d4',
+    color: '#7c3aed',
   },
   {
     id: 'voicego',
@@ -68,6 +53,21 @@ const projects = [
     ],
     link: '#',
     color: '#10b981',
+  },
+  {
+    id: 'infuturum',
+    title: 'Infuturum 4.0',
+    subtitle: 'Frontend Development',
+    description: 'Interactive event website for ACM Bennett University with cinematic UI, parallax effects, countdown timers, and media interactions.',
+    image: '/project-infuturum.png',
+    tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+    highlights: [
+      'Cinematic UI with parallax animations',
+      'Countdown timers and media interactions',
+      'Responsive, modular component architecture',
+    ],
+    link: '#',
+    color: '#06b6d4',
   },
 ];
 
@@ -147,9 +147,9 @@ export default function Projects() {
                 letterSpacing: '-1px',
               }}
             >
-              Showcasing My Work for
+              Showcasing
               <br />
-              <span className="gradient-text">Your Inspiration</span>
+              <span className="gradient-text">My Works</span>
             </motion.h2>
           </div>
           <motion.p
