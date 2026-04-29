@@ -34,27 +34,8 @@ export default function About() {
     return () => ctx.revert();
   }, []);
 
-  const experience = [
-    {
-      title: 'Full Stack Developer',
-      company: 'Independent / Hackathon Projects',
-      period: '2024 — Present',
-      description: 'Building production-grade applications using Next.js, React, Node.js, and modern cloud infrastructure.',
-    },
-    {
-      title: 'AI/ML Engineer',
-      company: 'Voice AI & NLP Systems',
-      period: '2025 — Present',
-      description: 'Designing STT, LLM, and TTS pipelines for real-time voice-based applications and AI systems.',
-    },
-  ];
 
-  const contact = [
-    { label: 'Phone', value: '+91 9389765205' },
-    { label: 'Email', value: 'raghavmil425@gmail.com' },
-    { label: 'GitHub', value: 'github.com/raghav5577' },
-    { label: 'Location', value: 'India' },
-  ];
+
 
   return (
     <section
@@ -75,262 +56,75 @@ export default function About() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          style={{ marginBottom: '16px' }}
+          style={{ marginBottom: '40px' }}
         >
           <span style={{
-            fontSize: '13px',
-            fontWeight: 500,
-            color: '#f5c518',
-            letterSpacing: '3px',
-            textTransform: 'uppercase',
+            fontSize: '14px',
+            color: '#888',
+            marginBottom: '8px',
+            display: 'block'
           }}>
-            ✦ About Me
           </span>
+          <h2 style={{
+            fontSize: 'clamp(2rem, 4vw, 2.5rem)',
+            fontWeight: 700,
+            color: '#fff',
+            letterSpacing: '-0.5px'
+          }}>
+            About Me
+          </h2>
         </motion.div>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          style={{
-            fontSize: 'clamp(2rem, 4vw, 3rem)',
-            fontWeight: 800,
-            lineHeight: 1.2,
-            marginBottom: '48px',
-            letterSpacing: '-1px',
-          }}
-        >
-          Passionate &amp; Driven
-          <br />
-          <span className="gradient-text">Full Stack Developer</span>
-        </motion.h2>
-
-        {/* Two Column Layout */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-          gap: '48px',
-          alignItems: 'start',
-        }}>
-          {/* Left: Bio + Image */}
-          <div className="about-card">
-            <p style={{
-              fontSize: '16px',
-              lineHeight: 1.8,
-              color: '#aaa',
-              marginBottom: '32px',
-            }}>
-              I&apos;m Raghav Karnatak, a B.Tech Computer Science student at Bennett University 
-              passionate about crafting intuitive, production-grade applications. With a CGPA of 8.70, 
-              I&apos;ve completed multiple full-stack projects integrating AI/ML capabilities, 
-              turning complex ideas into seamless interfaces.
-            </p>
-
-            <motion.a
-              href="/Raghav_Karnatak_Resume.pdf"
-              download
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '12px 28px',
-                background: 'rgba(245, 197, 24, 0.1)',
-                border: '1px solid rgba(245, 197, 24, 0.3)',
-                color: '#f5c518',
-                fontSize: '14px',
-                fontWeight: 600,
-                borderRadius: '50px',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                marginBottom: '32px',
-              }}
-            >
-              Download Resume
-              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-              </svg>
-            </motion.a>
-
-            {/* Profile card */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '16px',
-              padding: '20px',
+        {/* Content Layout */}
+        <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-start">
+          {/* Left: Image */}
+          <div 
+            id="about-image-placeholder"
+            className="about-card w-full md:w-[350px] shrink-0"
+            style={{
+              position: 'relative',
+              aspectRatio: '1/1',
               borderRadius: '16px',
+              overflow: 'hidden',
+              border: '1px solid rgba(255,255,255,0.08)',
               background: 'rgba(17, 17, 17, 0.6)',
-              border: '1px solid rgba(255,255,255,0.05)',
-            }}>
-              <div style={{
-                width: '60px',
-                height: '60px',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                position: 'relative',
-                flexShrink: 0,
-              }}>
-                <Image src="/DSC_1344.jpeg" alt="Raghav" fill style={{ objectFit: 'cover', transform: 'scale(1.2)', objectPosition: 'top' }} />
-              </div>
-              <div>
-                <h4 style={{ fontSize: '16px', fontWeight: 600, color: '#fff' }}>
-                  Raghav Karnatak
-                </h4>
-                <p style={{ fontSize: '13px', color: '#888' }}>
-                  Full Stack Developer &amp; AI Engineer
-                </p>
-              </div>
-            </div>
+              boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+            }}
+          >
+            <Image 
+              src="/DSC_1344.jpeg" 
+              alt="Raghav Karnatak" 
+              fill 
+              style={{ objectFit: 'cover', objectPosition: 'center', transform: 'scale(1.05)' }} 
+            />
           </div>
 
-          {/* Right: Experience + Contact */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-            {/* Experience */}
-            <div className="about-card">
-              <h3 style={{
-                fontSize: '18px',
-                fontWeight: 700,
-                color: '#fff',
-                marginBottom: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}>
-                <span style={{ color: '#f5c518' }}>✦</span> Experience
-              </h3>
-              {experience.map((exp, i) => (
-                <div
-                  key={i}
-                  style={{
-                    padding: '20px',
-                    borderRadius: '12px',
-                    background: 'rgba(17, 17, 17, 0.6)',
-                    border: '1px solid rgba(255,255,255,0.05)',
-                    marginBottom: '12px',
-                  }}
-                >
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    marginBottom: '8px',
-                    flexWrap: 'wrap',
-                    gap: '8px',
-                  }}>
-                    <h4 style={{ fontSize: '15px', fontWeight: 600, color: '#fff' }}>
-                      {exp.title}
-                    </h4>
-                    <span style={{
-                      fontSize: '11px',
-                      padding: '3px 10px',
-                      borderRadius: '20px',
-                      background: 'rgba(245, 197, 24, 0.1)',
-                      color: '#f5c518',
-                      fontWeight: 500,
-                      whiteSpace: 'nowrap',
-                    }}>
-                      {exp.period}
-                    </span>
-                  </div>
-                  <p style={{ fontSize: '13px', color: '#888', marginBottom: '8px' }}>
-                    {exp.company}
-                  </p>
-                  <p style={{ fontSize: '13px', lineHeight: 1.6, color: '#aaa' }}>
-                    {exp.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* Contact */}
-            <div className="about-card">
-              <h3 style={{
-                fontSize: '18px',
-                fontWeight: 700,
-                color: '#fff',
-                marginBottom: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}>
-                <span style={{ color: '#f5c518' }}>✦</span> Contact
-              </h3>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '12px',
-              }}>
-                {contact.map((item) => (
-                  <div
-                    key={item.label}
-                    style={{
-                      padding: '16px',
-                      borderRadius: '12px',
-                      background: 'rgba(17, 17, 17, 0.6)',
-                      border: '1px solid rgba(255,255,255,0.05)',
-                    }}
-                  >
-                    <p style={{ fontSize: '11px', color: '#666', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                      {item.label}
-                    </p>
-                    <p style={{ fontSize: '13px', color: '#ccc', fontWeight: 500, wordBreak: 'break-all' }}>
-                      {item.value}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Education */}
-            <div className="about-card">
-              <h3 style={{
-                fontSize: '18px',
-                fontWeight: 700,
-                color: '#fff',
-                marginBottom: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}>
-                <span style={{ color: '#f5c518' }}>✦</span> Education
-              </h3>
-              <div style={{
-                padding: '20px',
-                borderRadius: '12px',
-                background: 'rgba(17, 17, 17, 0.6)',
-                border: '1px solid rgba(255,255,255,0.05)',
-              }}>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  marginBottom: '8px',
-                  flexWrap: 'wrap',
-                  gap: '8px',
-                }}>
-                  <h4 style={{ fontSize: '15px', fontWeight: 600, color: '#fff' }}>
-                    B.Tech in CSE
-                  </h4>
-                  <span style={{
-                    fontSize: '11px',
-                    padding: '3px 10px',
-                    borderRadius: '20px',
-                    background: 'rgba(245, 197, 24, 0.1)',
-                    color: '#f5c518',
-                    fontWeight: 500,
-                  }}>
-                    2024 — Present
-                  </span>
-                </div>
-                <p style={{ fontSize: '13px', color: '#888', marginBottom: '4px' }}>
-                  Bennett University
-                </p>
-                <p style={{ fontSize: '13px', color: '#f5c518', fontWeight: 600 }}>
-                  CGPA: 8.70
-                </p>
-              </div>
-            </div>
+          {/* Right: Text Content */}
+          <div className="about-card flex flex-col gap-6 pt-2">
+            <h3 style={{ 
+              fontSize: 'clamp(1.8rem, 3vw, 2.2rem)', 
+              fontWeight: 700, 
+              color: '#fff',
+              letterSpacing: '-0.5px'
+            }}>
+              Raghav Karnatak
+            </h3>
+            
+            <p style={{ 
+              fontSize: '18px', 
+              color: '#ddd', 
+              fontWeight: 500 
+            }}>
+              <span style={{ color: '#888' }}></span> Full Stack Developer bringing seamless solutions to life — with a taste for premium aesthetics.
+            </p>
+            
+            <p style={{ 
+              fontSize: '16px', 
+              lineHeight: 1.8, 
+              color: '#999' 
+            }}>
+              Hey there! Raghav this side — a Full Stack Developer who obsesses over building production-grade web apps that don't just work, they look stunning doing it. From pixel-perfect frontends to robust backends, and sprinkling AI integrations wherever they make things smarter — that's the sweet spot. When not shipping code, you'll find me strumming the guitar, smashing it on the badminton court, or out on a morning run.
+            </p>
           </div>
         </div>
       </div>
