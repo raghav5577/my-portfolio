@@ -80,7 +80,7 @@ export default function About() {
           {/* Left: Image */}
           <div 
             id="about-image-placeholder"
-            className="about-card w-full md:w-[350px] shrink-0"
+            className="w-full md:w-[350px] shrink-0"
             style={{
               position: 'relative',
               aspectRatio: '1/1',
@@ -88,7 +88,8 @@ export default function About() {
               overflow: 'hidden',
               border: '1px solid rgba(255,255,255,0.08)',
               background: 'rgba(17, 17, 17, 0.6)',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+              boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+              opacity: 0,
             }}
           >
             <Image 

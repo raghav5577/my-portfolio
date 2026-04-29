@@ -78,188 +78,151 @@ export default function FloatingAvatar() {
       delay: 0.1,
     });
 
-    // 2. Scroll-driven: move from center to bottom-left
-    popTl.add(() => {
-      gsap.to(el, {
-        scrollTrigger: {
-          trigger: '#home',
-          start: 'top top',
-          end: 'bottom 40%',
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-          id: 'avatar-move',
-        },
-        x: endX,
-        y: endY,
-        width: targetSize,
-        height: targetSize,
-        ease: 'power2.inOut',
-      });
+    // 2. State Proxy for unified animation
+    const proxy = { move: 0, about: 0, leave: 0 };
+
+    gsap.to(proxy, {
+      move: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#home',
+        start: 'top top',
+        end: 'bottom 40%',
+        scrub: 0.3,
+        id: 'avatar-move'
+      }
     });
 
-    // 3. Scroll-driven: move from bottom-left to About section
-    popTl.add(() => {
-      gsap.fromTo(el, {
-        x: () => endX,
-        y: () => endY,
-        width: targetSize,
-        height: targetSize,
-        borderRadius: '50%',
-        borderWidth: '3px',
-        borderColor: 'rgba(245, 197, 24, 0.4)',
-      }, {
-        scrollTrigger: {
-          trigger: '#about',
-          start: 'top bottom',
-          end: 'top 20%',
-          scrub: 1,
-          invalidateOnRefresh: true,
-          id: 'avatar-about',
-          onEnter: () => {
-            const aboutPh = document.getElementById('about-image-placeholder');
-            if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
-          },
-          onLeave: () => {
-            const aboutPh = document.getElementById('about-image-placeholder');
-            gsap.set(el, { opacity: 0 });
-            if (aboutPh) gsap.set(aboutPh, { opacity: 1 });
-          },
-          onEnterBack: () => {
-            const aboutPh = document.getElementById('about-image-placeholder');
-            gsap.set(el, { opacity: 1 });
-            if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
-          }
-        },
-        x: () => {
-          const aboutPh = document.getElementById('about-image-placeholder');
-          return aboutPh ? aboutPh.getBoundingClientRect().left : endX;
-        },
-        y: () => {
-          const aboutPh = document.getElementById('about-image-placeholder');
-          const aboutSec = document.getElementById('about');
-          if (aboutPh && aboutSec) {
-            const phRect = aboutPh.getBoundingClientRect();
-            const secRect = aboutSec.getBoundingClientRect();
-            return (phRect.top - secRect.top) + (window.innerHeight * 0.20);
-          }
-          return endY;
-        },
-        width: () => {
-          const aboutPh = document.getElementById('about-image-placeholder');
-          return aboutPh ? aboutPh.offsetWidth : targetSize;
-        },
-        height: () => {
-          const aboutPh = document.getElementById('about-image-placeholder');
-          return aboutPh ? aboutPh.offsetHeight : targetSize;
-        },
-        borderRadius: '16px',
-        borderWidth: '0px',
-        borderColor: 'rgba(255,255,255,0.08)',
-        ease: 'power1.inOut',
-        immediateRender: false,
-      });
+    gsap.to(proxy, {
+      about: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#about',
+        start: 'top bottom',
+        end: 'top 20%',
+        scrub: 0.5,
+        id: 'avatar-about'
+      }
     });
 
-    // Recalculate positions on resize
-    const onResize = () => {
-      ScrollTrigger.getById('avatar-move')?.kill();
-      ScrollTrigger.getById('avatar-about')?.kill();
+    gsap.to(proxy, {
+      leave: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#about',
+        start: 'bottom 80%',
+        end: 'bottom 20%',
+        scrub: 0.5,
+        id: 'avatar-leave-about'
+      }
+    });
+
+    // 3. Centralized Renderer
+    const renderAvatar = () => {
+      if (!el) return;
+
+      const scrollY = window.scrollY;
+      const aboutSec = document.getElementById('about');
+      const aboutTop = aboutSec ? aboutSec.getBoundingClientRect().top + scrollY : 0;
       
-      const newPos = getPlaceholderPos();
-      const newStartX = newPos.x;
-      const newStartY = newPos.y;
-      const newEndX = targetLeft;
-      const newEndY = window.innerHeight - targetBottom - targetSize;
+      // Ensure we have fresh coordinates
+      const aboutPh = document.getElementById('about-image-placeholder');
+      
+      let phX = targetLeft;
+      let phY = window.innerHeight - targetBottom - targetSize;
+      let phW = targetSize;
+      let phH = targetSize;
 
-      // Only update if we haven't scrolled past the trigger
-      const scrollProgress = ScrollTrigger.getById('avatar-move')?.progress ?? 0;
-      if (scrollProgress < 1) {
-        gsap.set(el, { x: newStartX, y: newStartY });
+      if (aboutPh && aboutSec) {
+        const phRect = aboutPh.getBoundingClientRect();
+        const secRect = aboutSec.getBoundingClientRect();
+        phX = phRect.left;
+        phY = (phRect.top - secRect.top) + (window.innerHeight * 0.20);
+        phW = aboutPh.offsetWidth;
+        phH = aboutPh.offsetHeight;
       }
 
-      gsap.to(el, {
-        scrollTrigger: {
-          trigger: '#home',
-          start: 'top top',
-          end: 'bottom 40%',
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-          id: 'avatar-move',
-        },
-        x: newEndX,
-        y: newEndY,
-        width: targetSize,
-        height: targetSize,
-        ease: 'power2.inOut',
-      });
+      const currentStartPos = getPlaceholderPos();
 
-      gsap.fromTo(el, {
-        x: () => newEndX,
-        y: () => newEndY,
-        width: targetSize,
-        height: targetSize,
-        borderRadius: '50%',
-        borderWidth: '3px',
-        borderColor: 'rgba(245, 197, 24, 0.4)',
-      }, {
-        scrollTrigger: {
-          trigger: '#about',
-          start: 'top bottom',
-          end: 'top 20%',
-          scrub: 1,
-          invalidateOnRefresh: true,
-          id: 'avatar-about',
-          onEnter: () => {
-            const aboutPh = document.getElementById('about-image-placeholder');
-            if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
-          },
-          onLeave: () => {
-            const aboutPh = document.getElementById('about-image-placeholder');
-            gsap.set(el, { opacity: 0 });
-            if (aboutPh) gsap.set(aboutPh, { opacity: 1 });
-          },
-          onEnterBack: () => {
-            const aboutPh = document.getElementById('about-image-placeholder');
-            gsap.set(el, { opacity: 1 });
-            if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
-          }
-        },
-        x: () => {
-          const aboutPh = document.getElementById('about-image-placeholder');
-          return aboutPh ? aboutPh.getBoundingClientRect().left : newEndX;
-        },
-        y: () => {
-          const aboutPh = document.getElementById('about-image-placeholder');
-          const aboutSec = document.getElementById('about');
-          if (aboutPh && aboutSec) {
-            const phRect = aboutPh.getBoundingClientRect();
-            const secRect = aboutSec.getBoundingClientRect();
-            return (phRect.top - secRect.top) + (window.innerHeight * 0.20);
-          }
-          return newEndY;
-        },
-        width: () => {
-          const aboutPh = document.getElementById('about-image-placeholder');
-          return aboutPh ? aboutPh.offsetWidth : targetSize;
-        },
-        height: () => {
-          const aboutPh = document.getElementById('about-image-placeholder');
-          return aboutPh ? aboutPh.offsetHeight : targetSize;
-        },
-        borderRadius: '16px',
-        borderWidth: '0px',
-        borderColor: 'rgba(255,255,255,0.08)',
-        ease: 'power1.inOut',
-        immediateRender: false,
-      });
+      const stateStart = {
+        x: currentStartPos.x, y: currentStartPos.y, width: startSize, height: startSize,
+        borderRadius: '50%', borderWidth: '3px', borderColor: 'rgba(245, 197, 24, 0.4)'
+      };
+
+      const stateFloat = {
+        x: targetLeft, y: window.innerHeight - targetBottom - targetSize, width: targetSize, height: targetSize,
+        borderRadius: '50%', borderWidth: '3px', borderColor: 'rgba(245, 197, 24, 0.4)'
+      };
+
+      const stateAbout = {
+        x: phX, y: phY, width: phW, height: phH,
+        borderRadius: '16px', borderWidth: '0px', borderColor: 'rgba(255,255,255,0.08)'
+      };
+
+      const stateLeave = {
+        x: phX, y: phY - (aboutSec?.offsetHeight || 0) + (window.innerHeight * 0.6), width: phW, height: phH,
+        borderRadius: '16px', borderWidth: '0px', borderColor: 'rgba(255,255,255,0.08)'
+      };
+
+      let finalState = stateStart;
+
+      // Decide which phase to show based on scroll position to avoid "ghost" states during jumps
+      if (scrollY > aboutTop + (aboutSec?.offsetHeight || 0) * 0.5) {
+        // We are clearly in or past the "Leave About" zone
+        finalState = gsap.utils.interpolate(stateLeave, stateFloat, proxy.leave);
+      } else if (scrollY > aboutTop - window.innerHeight * 0.5) {
+        // We are near or in the "About" zone
+        finalState = gsap.utils.interpolate(stateFloat, stateAbout, proxy.about);
+      } else {
+        // We are near the top or moving towards the floating corner
+        finalState = gsap.utils.interpolate(stateStart, stateFloat, proxy.move);
+      }
+
+      gsap.set(el, finalState);
     };
 
+    gsap.ticker.add(renderAvatar);
+
+    // 4. Standalone Visibility Trigger
+    ScrollTrigger.create({
+      trigger: '#about',
+      start: 'top 20%',
+      end: 'bottom 80%',
+      id: 'avatar-visibility',
+      onEnter: () => {
+        const aboutPh = document.getElementById('about-image-placeholder');
+        gsap.set(el, { opacity: 0 });
+        if (aboutPh) gsap.set(aboutPh, { opacity: 1 });
+      },
+      onLeave: () => {
+        const aboutPh = document.getElementById('about-image-placeholder');
+        gsap.set(el, { opacity: 1 });
+        if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
+      },
+      onEnterBack: () => {
+        const aboutPh = document.getElementById('about-image-placeholder');
+        gsap.set(el, { opacity: 0 });
+        if (aboutPh) gsap.set(aboutPh, { opacity: 1 });
+      },
+      onLeaveBack: () => {
+        const aboutPh = document.getElementById('about-image-placeholder');
+        gsap.set(el, { opacity: 1 });
+        if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
+      }
+    });
+
+    const onResize = () => {
+      ScrollTrigger.refresh();
+    };
     window.addEventListener('resize', onResize);
 
     return () => {
       popTl.kill();
+      gsap.ticker.remove(renderAvatar);
       ScrollTrigger.getById('avatar-move')?.kill();
       ScrollTrigger.getById('avatar-about')?.kill();
+      ScrollTrigger.getById('avatar-leave-about')?.kill();
+      ScrollTrigger.getById('avatar-visibility')?.kill();
       window.removeEventListener('resize', onResize);
     };
   }, [visible]);

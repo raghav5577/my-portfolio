@@ -28,13 +28,14 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     gsap.ticker.lagSmoothing(0);
 
-    // Refresh ScrollTrigger after all content loads
-    const timer = setTimeout(() => {
+    // Refresh ScrollTrigger when DOM layout/height changes (e.g. dynamic imports loading)
+    const resizeObserver = new ResizeObserver(() => {
       ScrollTrigger.refresh();
-    }, 500);
+    });
+    resizeObserver.observe(document.body);
 
     return () => {
-      clearTimeout(timer);
+      resizeObserver.disconnect();
       lenis.destroy();
       gsap.ticker.remove(lenis.raf);
     };
