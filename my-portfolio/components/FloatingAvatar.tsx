@@ -123,91 +123,78 @@ export default function FloatingAvatar() {
 
       const scrollY = window.scrollY;
       const aboutSec = document.getElementById('about');
-      const aboutTop = aboutSec ? aboutSec.getBoundingClientRect().top + scrollY : 0;
-      
-      // Ensure we have fresh coordinates
       const aboutPh = document.getElementById('about-image-placeholder');
       
+      const currentStartPos = getPlaceholderPos();
+
+      // State 1: Start (Hero Placeholder)
+      const stateStart = {
+        x: currentStartPos.x, y: currentStartPos.y, width: startSize, height: startSize,
+        borderRadius: '50%', borderWidth: '3px', borderColor: 'rgba(245, 197, 24, 0.4)',
+        opacity: 1
+      };
+
+      // State 2: Float (Corner)
+      const stateFloat = {
+        x: targetLeft, y: window.innerHeight - targetBottom - targetSize, width: targetSize, height: targetSize,
+        borderRadius: '50%', borderWidth: '3px', borderColor: 'rgba(245, 197, 24, 0.4)',
+        opacity: 1
+      };
+
+      // State 3: About (Placeholder Screen Position)
       let phX = targetLeft;
       let phY = window.innerHeight - targetBottom - targetSize;
       let phW = targetSize;
       let phH = targetSize;
 
-      if (aboutPh && aboutSec) {
+      if (aboutPh) {
         const phRect = aboutPh.getBoundingClientRect();
-        const secRect = aboutSec.getBoundingClientRect();
         phX = phRect.left;
-        phY = (phRect.top - secRect.top) + (window.innerHeight * 0.20);
+        phY = phRect.top;
         phW = aboutPh.offsetWidth;
         phH = aboutPh.offsetHeight;
       }
 
-      const currentStartPos = getPlaceholderPos();
-
-      const stateStart = {
-        x: currentStartPos.x, y: currentStartPos.y, width: startSize, height: startSize,
-        borderRadius: '50%', borderWidth: '3px', borderColor: 'rgba(245, 197, 24, 0.4)'
-      };
-
-      const stateFloat = {
-        x: targetLeft, y: window.innerHeight - targetBottom - targetSize, width: targetSize, height: targetSize,
-        borderRadius: '50%', borderWidth: '3px', borderColor: 'rgba(245, 197, 24, 0.4)'
-      };
-
       const stateAbout = {
         x: phX, y: phY, width: phW, height: phH,
-        borderRadius: '16px', borderWidth: '0px', borderColor: 'rgba(255,255,255,0.08)'
+        borderRadius: '16px', borderWidth: '0px', borderColor: 'rgba(255,255,255,0.08)',
+        opacity: 1
       };
 
-      const stateLeave = {
-        x: phX, y: phY - (aboutSec?.offsetHeight || 0) + (window.innerHeight * 0.6), width: phW, height: phH,
-        borderRadius: '16px', borderWidth: '0px', borderColor: 'rgba(255,255,255,0.08)'
-      };
+      let finalState;
 
-      let finalState = stateStart;
-
-      // Decide which phase to show based on scroll position to avoid "ghost" states during jumps
-      if (scrollY > aboutTop + (aboutSec?.offsetHeight || 0) * 0.5) {
-        // We are clearly in or past the "Leave About" zone
-        finalState = gsap.utils.interpolate(stateLeave, stateFloat, proxy.leave);
-      } else if (scrollY > aboutTop - window.innerHeight * 0.5) {
-        // We are near or in the "About" zone
+      // Smooth phase transitions based on scroll triggers
+      if (proxy.leave > 0) {
+        // Transition from About position back to Float (corner)
+        finalState = gsap.utils.interpolate(stateAbout, stateFloat, proxy.leave);
+      } else if (proxy.about > 0) {
+        // Transition from Float (corner) to About position
         finalState = gsap.utils.interpolate(stateFloat, stateAbout, proxy.about);
       } else {
-        // We are near the top or moving towards the floating corner
+        // Transition from Start (Hero) to Float (corner)
         finalState = gsap.utils.interpolate(stateStart, stateFloat, proxy.move);
       }
 
       gsap.set(el, finalState);
+
+      // Match image styling during the About phase
+      const img = el.querySelector('img');
+      if (img) {
+        const targetScale = gsap.utils.interpolate(1.3, 1.05, proxy.about);
+        const targetObjPos = proxy.about > 0.5 ? 'center' : 'top';
+        gsap.set(img, { scale: targetScale, objectPosition: targetObjPos });
+      }
     };
 
     gsap.ticker.add(renderAvatar);
 
-    // 4. Standalone Visibility Trigger
+    // 4. Standalone Visibility Trigger (Only for refreshing ScrollTrigger)
     ScrollTrigger.create({
       trigger: '#about',
-      start: 'top 20%',
-      end: 'bottom 80%',
-      id: 'avatar-visibility',
-      onEnter: () => {
-        const aboutPh = document.getElementById('about-image-placeholder');
-        gsap.set(el, { opacity: 0 });
-        if (aboutPh) gsap.set(aboutPh, { opacity: 1 });
-      },
-      onLeave: () => {
-        const aboutPh = document.getElementById('about-image-placeholder');
-        gsap.set(el, { opacity: 1 });
-        if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
-      },
-      onEnterBack: () => {
-        const aboutPh = document.getElementById('about-image-placeholder');
-        gsap.set(el, { opacity: 0 });
-        if (aboutPh) gsap.set(aboutPh, { opacity: 1 });
-      },
-      onLeaveBack: () => {
-        const aboutPh = document.getElementById('about-image-placeholder');
-        gsap.set(el, { opacity: 1 });
-        if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
+      start: 'top bottom',
+      end: 'bottom top',
+      onUpdate: (self) => {
+        // Force refresh if needed, but ticker handles positioning
       }
     });
 
@@ -222,7 +209,6 @@ export default function FloatingAvatar() {
       ScrollTrigger.getById('avatar-move')?.kill();
       ScrollTrigger.getById('avatar-about')?.kill();
       ScrollTrigger.getById('avatar-leave-about')?.kill();
-      ScrollTrigger.getById('avatar-visibility')?.kill();
       window.removeEventListener('resize', onResize);
     };
   }, [visible]);

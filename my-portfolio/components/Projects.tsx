@@ -12,62 +12,63 @@ const projects = [
   {
     id: 'campusbuddy',
     title: 'CampusBuddy',
-    subtitle: 'Full Stack Development',
-    description: 'MERN-based food ordering platform for ordering from multiple outlets with real-time tracking, live order status, and secure role-based authentication.',
+    subtitle: 'Campus Food Ordering System',
+    description: 'A fast and efficient food ordering system for campus outlets, allowing users to browse menus, place orders, and skip long queues with real-time notifications.',
     image: '/project-campusbuddy.png',
-    tags: ['React.js', 'MongoDB', 'Express', 'Socket.io', 'JWT'],
+    tags: ['Next.js', 'React', 'Tailwind CSS', 'Real-time Notifications'],
     highlights: [
-      'Multi-outlet ordering with real-time tracking',
-      'Live order status updates using Socket.io',
-      'Secure authentication with role-based access',
+      'Browse 5+ campus outlets & 100+ items',
+      'Quick ordering (average 2 mins)',
+      'Real-time notifications & 24/7 support',
     ],
-    link: '#',
+    link: 'https://campus-buddy.raghavv.dev',
     color: '#f59e0b',
   },
   {
     id: 'orbit',
-    title: 'ORBIT – AI 911 Dispatch',
-    subtitle: 'Full Stack Development',
-    description: 'Built a production-style voice AI system to convert emergency calls into structured incidents and dispatch workflows using Next.js, Mappls API, MCP and LLM.',
+    title: 'Orbit',
+    subtitle: 'AI-Powered Emergency Dispatch',
+    description: 'A cutting-edge emergency response platform that utilizes an AI operator to capture incident details from natural speech and route emergency services instantly.',
     image: '/project-orbit.png',
-    tags: ['Next.js', 'React', 'Supabase', 'Twilio', 'LLM API'],
+    tags: ['Next.js', 'AI/LLM', 'NLP', 'Tailwind CSS'],
     highlights: [
-      'Voice pipeline integrating STT, LLM-based classification',
-      'Outbound call automation via Twilio',
-      'Webhook pipelines for call events and data normalization',
+      'AI Voice Operator for natural speech capture',
+      'Automated Severity Classification',
+      'Real-time Police, Fire, & Medical routing',
     ],
-    link: '#',
+    link: 'https://orbit.anvesh.dev',
     color: '#7c3aed',
   },
-  {
-    id: 'voicego',
-    title: 'VoiceGo',
-    subtitle: 'Full Stack Development',
-    description: 'AI-powered real-time voice customer support system using WebSocket audio streaming with analytics dashboard for monitoring support and managing agents.',
-    image: '/project-voicego.png',
-    tags: ['Next.js', 'WebSocket', 'PostgreSQL', 'Redis', 'Docker'],
-    highlights: [
-      'Real-time voice streaming via WebSocket',
-      'Scalable backend with analytics dashboard',
-      'Voice pipeline: STT → LLM → TTS',
-    ],
-    link: '#',
-    color: '#10b981',
-  },
+
   {
     id: 'infuturum',
     title: 'Infuturum 4.0',
-    subtitle: 'Frontend Development',
-    description: 'Interactive event website for ACM Bennett University with cinematic UI, parallax effects, countdown timers, and media interactions.',
+    subtitle: 'Flagship Tech Fest Website',
+    description: 'An immersive event website for ACM Bennett University featuring a "Stranger Things" inspired aesthetic with interactive scroll animations.',
     image: '/project-infuturum.png',
-    tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+    tags: ['Next.js',  'Tailwind CSS', 'Framer Motion'],
     highlights: [
-      'Cinematic UI with parallax animations',
-      'Countdown timers and media interactions',
-      'Responsive, modular component architecture',
+      'Immersive Hawkins vs Upside Down transitions',
+      'Showcases for RESEM Hackathon & Fish Hunt',
+      '3D card effects & cinematic visual storytelling',
     ],
-    link: '#',
+    link: 'https://www.infuturum.in',
     color: '#06b6d4',
+  },
+  {
+    id: 'cirs',
+    title: 'CIRS',
+    subtitle: 'Campus Issue Reporting System',
+    description: 'A digital-first platform for university communities to report maintenance, safety, and administrative issues, ensuring transparent and accountable resolutions.',
+    image: '/project-cirs.png',
+    tags: ['Next.js', 'Tailwind CSS', 'Node.js', 'SSO Auth'],
+    highlights: [
+      'Digital-first reporting & live status tracking',
+      'Automated routing to relevant departments',
+      'Secure role-based access & SSO integration',
+    ],
+    link: 'https://cirs.raghavv.dev',
+    color: '#3F51B5',
   },
 ];
 
@@ -175,8 +176,11 @@ export default function Projects() {
           gap: '24px',
         }}>
           {projects.map((project) => (
-            <motion.div
+            <motion.a
               key={project.id}
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
               className="project-card"
               onMouseEnter={() => setActiveProject(project.id)}
               onMouseLeave={() => setActiveProject(null)}
@@ -189,6 +193,8 @@ export default function Projects() {
                 cursor: 'pointer',
                 transition: 'border-color 0.3s ease',
                 borderColor: activeProject === project.id ? `${project.color}33` : 'rgba(255,255,255,0.05)',
+                display: 'block',
+                textDecoration: 'none',
               }}
             >
               {/* Image */}
@@ -332,7 +338,7 @@ export default function Projects() {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
 

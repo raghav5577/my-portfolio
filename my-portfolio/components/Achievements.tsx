@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 const achievements = [
   {
     title: 'Winner, Hackathon at BITS Pilani',
-    event: 'APOGEE 2025',
+    event: 'Bits Pilani — APOGEE 2025',
     icon: '🏆',
     color: '#f5c518',
   },
