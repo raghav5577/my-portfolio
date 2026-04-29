@@ -28,7 +28,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Removed scroll-behavior: smooth to avoid conflict with JS scrolling */
 }
 
 body {

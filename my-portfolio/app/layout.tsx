@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
+import FloatingAvatar from "@/components/FloatingAvatar";
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -31,9 +32,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`}>
-      <body className="min-h-screen flex flex-col bg-[#0a0a0a]">
+    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col bg-[#0a0a0a]" suppressHydrationWarning>
         <Navbar />
+        <FloatingAvatar />
         <SmoothScroll>
           <main className="flex-grow">{children}</main>
         </SmoothScroll>

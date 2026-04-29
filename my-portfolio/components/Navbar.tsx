@@ -53,7 +53,7 @@ export default function Navbar() {
       gsap.to(window, {
         duration: 1.2,
         scrollTo: { y: elem, offsetY: offset },
-        ease: 'power4.inOut',
+        ease: 'power3.inOut',
       });
       setMobileOpen(false);
     }
@@ -72,10 +72,10 @@ export default function Navbar() {
           right: 0,
           zIndex: 1000,
           padding: scrolled ? '12px 0' : '20px 0',
-          background: scrolled ? 'rgba(10, 10, 10, 0.85)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.05)' : 'none',
-          transition: 'all 0.3s ease',
+          background: scrolled ? 'rgba(0, 0, 0, 0.1)' : 'transparent', // Extremely subtle
+          backdropFilter: scrolled ? 'blur(24px)' : 'none', // Strong blur for readability without a blocky background
+          borderBottom: 'none', // Removed border completely for a seamless look
+          transition: 'all 0.4s ease',
         }}
       >
         <div style={{
@@ -87,7 +87,7 @@ export default function Navbar() {
           justifyContent: 'space-between',
         }}>
           {/* Logo */}
-          <a href="#home" onClick={(e) => scrollToSection(e, '#home')} style={{ textDecoration: 'none' }}>
+          <a href="#home" onClick={(e) => scrollToSection(e, '#home')} style={{ textDecoration: 'none', outline: 'none' }}>
             <motion.div
               whileHover={{ scale: 1.05 }}
               style={{
@@ -131,11 +131,11 @@ export default function Navbar() {
             className="hidden md:flex"
           >
             {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
+              <a
+                key={link.name}
+                href={link.href}
                 onClick={(e) => scrollToSection(e, link.href)}
-                style={{ textDecoration: 'none' }}
+                style={{ textDecoration: 'none', outline: 'none' }}
               >
                 <motion.span
                   whileHover={{ color: '#f5c518' }}
@@ -172,7 +172,7 @@ export default function Navbar() {
           <a
             href="#contact"
             onClick={(e) => scrollToSection(e, '#contact')}
-            style={{ textDecoration: 'none' }}
+            style={{ textDecoration: 'none', outline: 'none' }}
             className="hidden md:flex"
           >
             <motion.div
