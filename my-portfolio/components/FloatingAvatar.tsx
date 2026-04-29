@@ -37,16 +37,11 @@ export default function FloatingAvatar() {
     const getPlaceholderPos = () => {
       const placeholder = document.getElementById('avatar-placeholder');
       if (placeholder) {
-        // Calculate position relative to the document, ignoring CSS transforms (like translateY)
-        let x = 0;
-        let y = 0;
-        let curr: HTMLElement | null = placeholder;
-        while (curr) {
-          x += curr.offsetLeft;
-          y += curr.offsetTop;
-          curr = curr.offsetParent as HTMLElement | null;
-        }
-        return { x, y: y - window.scrollY };
+        const rect = placeholder.getBoundingClientRect();
+        return { 
+          x: rect.left, 
+          y: rect.top 
+        };
       }
       // Fallback
       return {
@@ -102,9 +97,73 @@ export default function FloatingAvatar() {
       });
     });
 
+    // 3. Scroll-driven: move from bottom-left to About section
+    popTl.add(() => {
+      gsap.fromTo(el, {
+        x: () => endX,
+        y: () => endY,
+        width: targetSize,
+        height: targetSize,
+        borderRadius: '50%',
+        borderWidth: '3px',
+        borderColor: 'rgba(245, 197, 24, 0.4)',
+      }, {
+        scrollTrigger: {
+          trigger: '#about',
+          start: 'top bottom',
+          end: 'top 20%',
+          scrub: 1,
+          invalidateOnRefresh: true,
+          id: 'avatar-about',
+          onEnter: () => {
+            const aboutPh = document.getElementById('about-image-placeholder');
+            if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
+          },
+          onLeave: () => {
+            const aboutPh = document.getElementById('about-image-placeholder');
+            gsap.set(el, { opacity: 0 });
+            if (aboutPh) gsap.set(aboutPh, { opacity: 1 });
+          },
+          onEnterBack: () => {
+            const aboutPh = document.getElementById('about-image-placeholder');
+            gsap.set(el, { opacity: 1 });
+            if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
+          }
+        },
+        x: () => {
+          const aboutPh = document.getElementById('about-image-placeholder');
+          return aboutPh ? aboutPh.getBoundingClientRect().left : endX;
+        },
+        y: () => {
+          const aboutPh = document.getElementById('about-image-placeholder');
+          const aboutSec = document.getElementById('about');
+          if (aboutPh && aboutSec) {
+            const phRect = aboutPh.getBoundingClientRect();
+            const secRect = aboutSec.getBoundingClientRect();
+            return (phRect.top - secRect.top) + (window.innerHeight * 0.20);
+          }
+          return endY;
+        },
+        width: () => {
+          const aboutPh = document.getElementById('about-image-placeholder');
+          return aboutPh ? aboutPh.offsetWidth : targetSize;
+        },
+        height: () => {
+          const aboutPh = document.getElementById('about-image-placeholder');
+          return aboutPh ? aboutPh.offsetHeight : targetSize;
+        },
+        borderRadius: '16px',
+        borderWidth: '0px',
+        borderColor: 'rgba(255,255,255,0.08)',
+        ease: 'power1.inOut',
+        immediateRender: false,
+      });
+    });
+
     // Recalculate positions on resize
     const onResize = () => {
       ScrollTrigger.getById('avatar-move')?.kill();
+      ScrollTrigger.getById('avatar-about')?.kill();
       
       const newPos = getPlaceholderPos();
       const newStartX = newPos.x;
@@ -133,6 +192,66 @@ export default function FloatingAvatar() {
         height: targetSize,
         ease: 'power2.inOut',
       });
+
+      gsap.fromTo(el, {
+        x: () => newEndX,
+        y: () => newEndY,
+        width: targetSize,
+        height: targetSize,
+        borderRadius: '50%',
+        borderWidth: '3px',
+        borderColor: 'rgba(245, 197, 24, 0.4)',
+      }, {
+        scrollTrigger: {
+          trigger: '#about',
+          start: 'top bottom',
+          end: 'top 20%',
+          scrub: 1,
+          invalidateOnRefresh: true,
+          id: 'avatar-about',
+          onEnter: () => {
+            const aboutPh = document.getElementById('about-image-placeholder');
+            if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
+          },
+          onLeave: () => {
+            const aboutPh = document.getElementById('about-image-placeholder');
+            gsap.set(el, { opacity: 0 });
+            if (aboutPh) gsap.set(aboutPh, { opacity: 1 });
+          },
+          onEnterBack: () => {
+            const aboutPh = document.getElementById('about-image-placeholder');
+            gsap.set(el, { opacity: 1 });
+            if (aboutPh) gsap.set(aboutPh, { opacity: 0 });
+          }
+        },
+        x: () => {
+          const aboutPh = document.getElementById('about-image-placeholder');
+          return aboutPh ? aboutPh.getBoundingClientRect().left : newEndX;
+        },
+        y: () => {
+          const aboutPh = document.getElementById('about-image-placeholder');
+          const aboutSec = document.getElementById('about');
+          if (aboutPh && aboutSec) {
+            const phRect = aboutPh.getBoundingClientRect();
+            const secRect = aboutSec.getBoundingClientRect();
+            return (phRect.top - secRect.top) + (window.innerHeight * 0.20);
+          }
+          return newEndY;
+        },
+        width: () => {
+          const aboutPh = document.getElementById('about-image-placeholder');
+          return aboutPh ? aboutPh.offsetWidth : targetSize;
+        },
+        height: () => {
+          const aboutPh = document.getElementById('about-image-placeholder');
+          return aboutPh ? aboutPh.offsetHeight : targetSize;
+        },
+        borderRadius: '16px',
+        borderWidth: '0px',
+        borderColor: 'rgba(255,255,255,0.08)',
+        ease: 'power1.inOut',
+        immediateRender: false,
+      });
     };
 
     window.addEventListener('resize', onResize);
@@ -140,6 +259,7 @@ export default function FloatingAvatar() {
     return () => {
       popTl.kill();
       ScrollTrigger.getById('avatar-move')?.kill();
+      ScrollTrigger.getById('avatar-about')?.kill();
       window.removeEventListener('resize', onResize);
     };
   }, [visible]);

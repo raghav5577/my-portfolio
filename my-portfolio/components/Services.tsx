@@ -13,34 +13,28 @@ if (typeof window !== 'undefined') {
 
 const services = [
   {
-    icon: '🎨',
-    title: 'UI/UX Design',
-    description: 'Crafting pixel-perfect interfaces with user-centered design principles. Creating engaging digital experiences that delight users.',
-    tags: ['Figma', 'Prototyping', 'User Research'],
-  },
-  {
     icon: '💻',
     title: 'Web Development',
-    description: 'Building performant full-stack applications using modern frameworks. From React frontends to Node.js backends and beyond.',
+    description: 'Crafting full-stack applications that are fast, scalable, and aesthetically sharp — from sleek React frontends to robust Node.js backends, built to perform end to end.',
     tags: ['React', 'Next.js', 'Node.js', 'TypeScript'],
   },
   {
     icon: '🤖',
-    title: 'AI/ML Engineering',
-    description: 'Developing intelligent systems with LLMs, NLP, and voice AI pipelines. Building production-ready AI-powered applications.',
+    title: 'AI Services',
+    description: 'Developing AI-powered intelligent systems, with  MCP server configuration, API setups, AI Agents and shipping complete applications that are actually smart. ',
     tags: ['LLMs', 'STT/TTS', 'NLP', 'Transformers'],
+  },
+  {
+    icon: '🚀',
+    title: 'DevOps & Deployment',
+    description: 'Deploying production-ready applications on cloud and managing DNS configurations so your project is live, fast, and reliable.',
+    tags: ['Docker', 'Vercel', 'Git'],
   },
   {
     icon: '⚡',
     title: 'Backend Systems',
     description: 'Designing scalable APIs, real-time systems, and event-driven architectures with robust database management.',
     tags: ['Express', 'FastAPI', 'PostgreSQL', 'Redis'],
-  },
-  {
-    icon: '🚀',
-    title: 'DevOps & Deployment',
-    description: 'Containerizing applications, setting up CI/CD pipelines, and deploying to cloud platforms for maximum reliability.',
-    tags: ['Docker', 'Vercel', 'Git', 'CI/CD'],
   },
 ];
 
@@ -159,7 +153,7 @@ export default function Services() {
         {/* Services Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
           gap: '20px',
         }}>
           {services.map((service, i) => (
@@ -181,7 +175,6 @@ export default function Services() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '16px',
-                ...(i === 0 ? { gridColumn: 'span 2' } : {}),
               }}
             >
               <span style={{ fontSize: '32px' }}>{service.icon}</span>
