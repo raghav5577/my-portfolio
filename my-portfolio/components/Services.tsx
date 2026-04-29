@@ -129,9 +129,9 @@ export default function Services() {
             const elem = document.getElementById('contact');
             if (elem) {
               gsap.to(window, {
-                duration: 1.2,
+                duration: 0.1,
                 scrollTo: { y: elem, offsetY: 80 },
-                ease: 'power4.inOut',
+                ease: 'power3.out',
               });
             }
           }} style={{ textDecoration: 'none' }}>
