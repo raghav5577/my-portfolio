@@ -8,6 +8,7 @@ import Skills from '@/components/Skills';
 import Achievements from '@/components/Achievements';
 import FAQ from '@/components/FAQ';
 import Contact from '@/components/Contact';
+import InteractiveSection from '@/components/InteractiveSection';
 
 import TechMarquee from '@/components/TechMarquee';
 
@@ -27,6 +28,7 @@ export default function Home() {
       <Achievements />
       <FAQ />
       <Contact />
+      <InteractiveSection />
     </>
   );
 }
