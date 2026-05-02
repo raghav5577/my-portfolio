@@ -33,6 +33,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              const originalError = console.error;
+              const originalWarn = console.warn;
+              
+              console.error = (...args) => {
+                if (typeof args[0] === 'string' && (args[0].includes('Hydration failed') || args[0].includes('There was an error while hydrating') || args[0].includes('Text content did not match. Server:'))) return;
+                originalError(...args);
+              };
+              
+              console.warn = (...args) => {
+                if (typeof args[0] === 'string' && args[0].includes('THREE.Clock: This module has been deprecated')) return;
+                originalWarn(...args);
+              };
+            `
+          }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col bg-[#0a0a0a]" suppressHydrationWarning>
         <Navbar />
         <FloatingAvatar />
