@@ -251,6 +251,7 @@ export default function FloatingAvatar() {
         src="/DSC_1344.jpeg"
         alt="Raghav Karnatak"
         fill
+        sizes="140px"
         style={{ objectFit: 'cover', transform: 'scale(1.3)', objectPosition: 'top' }}
         priority
       />

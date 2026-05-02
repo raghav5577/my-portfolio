@@ -96,6 +96,7 @@ export default function About() {
               src="/DSC_1344.jpeg" 
               alt="Raghav Karnatak" 
               fill 
+              sizes="(max-width: 768px) 100vw, 350px"
               style={{ objectFit: 'cover', objectPosition: 'center', transform: 'scale(1.05)' }} 
             />
           </div>

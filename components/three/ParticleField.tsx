@@ -34,10 +34,13 @@ function Particles() {
     return cols;
   }, []);
 
-  useFrame((state) => {
+  const timer = useMemo(() => new THREE.Timer(), []);
+
+  useFrame(() => {
     if (!meshRef.current) return;
+    timer.update();
+    const time = timer.getElapsed();
     const positions = meshRef.current.geometry.attributes.position.array as Float32Array;
-    const time = state.clock.elapsedTime;
 
     for (let i = 0; i < count; i++) {
       positions[i * 3] += velocities[i * 3] + Math.sin(time * 0.3 + i) * 0.001;
@@ -60,15 +63,11 @@ function Particles() {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={count}
-          array={positions}
-          itemSize={3}
+          args={[positions, 3]}
         />
         <bufferAttribute
           attach="attributes-color"
-          count={count}
-          array={colors}
-          itemSize={3}
+          args={[colors, 3]}
         />
       </bufferGeometry>
       <pointsMaterial
